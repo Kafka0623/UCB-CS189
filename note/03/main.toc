@@ -1,0 +1,24 @@
+\contentsline {section}{\numberline {1}基本设定与增广记号}{1}{section.1}%
+\contentsline {section}{\numberline {2}$x$-space 与 $w$-space 的几何对偶}{1}{section.2}%
+\contentsline {subsection}{\numberline {2.1}点–超平面对偶与分类约束的两种视角}{1}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}“$w$ 既是向量又是点”的说明}{1}{subsection.2.2}%
+\contentsline {section}{\numberline {3}风险函数、形状与梯度}{1}{section.3}%
+\contentsline {subsection}{\numberline {3.1}仅误分类计损的风险与感知机损失}{1}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}梯度、最速下降与更新}{2}{subsection.3.2}%
+\contentsline {section}{\numberline {4}GD 与 SGD：定义、复杂度与在线性}{2}{section.4}%
+\contentsline {subsection}{\numberline {4.1}两种下降}{2}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}在线算法与步长}{2}{subsection.4.2}%
+\contentsline {section}{\numberline {5}偏置与“增加一维”的统一}{2}{section.5}%
+\contentsline {section}{\numberline {6}凸优化与 SGD 收敛}{2}{section.6}%
+\contentsline {section}{\numberline {7}感知机收敛定理与错误上界}{2}{section.7}%
+\contentsline {subsection}{\numberline {7.1}陈述与参数}{2}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}证明（Novikoff）}{3}{subsection.7.2}%
+\contentsline {section}{\numberline {8}间隔（margin）的本质与最大化间隔}{3}{section.8}%
+\contentsline {subsection}{\numberline {8.1}函数间隔与几何间隔}{3}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.2}定标、条带与最大化}{3}{subsection.8.2}%
+\contentsline {section}{\numberline {9}硬间隔 SVM 的凸二次规划与权重空间几何}{3}{section.9}%
+\contentsline {subsection}{\numberline {9.1}原始问题（线性可分）}{3}{subsection.9.1}%
+\contentsline {subsection}{\numberline {9.2}权重空间三维/截面直观}{4}{subsection.9.2}%
+\contentsline {section}{\numberline {10}从感知机到 SVM：动机与实践}{4}{section.10}%
+\contentsline {section}{\numberline {11}历史与备注}{4}{section.11}%
+\contentsline {section}{\numberline {12}常见疑问与澄清}{4}{section.12}%

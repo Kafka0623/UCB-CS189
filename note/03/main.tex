@@ -1,0 +1,270 @@
+%!TeX program = xelatex
+\documentclass[10.5pt,hyperref,a4paper,UTF8]{ctexart}
+\usepackage{RUCReport}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{threeparttable}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{subcaption}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{float}
+\geometry{a4paper, margin=1in}
+\renewcommand\thesubfigure{\arabic{subfigure}} % 子图编号改为中文小写
+% 定义可能使用到的颜色
+\definecolor{CPPLight}  {HTML} {686868}
+\definecolor{CPPSteel}  {HTML} {888888}
+\definecolor{CPPDark}   {HTML} {262626}
+\definecolor{CPPBlue}   {HTML} {4172A3}
+\definecolor{CPPGreen}  {HTML} {487818}
+\definecolor{CPPBrown}  {HTML} {A07040}
+\definecolor{CPPRed}    {HTML} {AD4D3A}
+\definecolor{CPPViolet} {HTML} {7040A0}
+\definecolor{CPPGray}  {HTML} {B8B8B8}
+\definecolor{keywordcolor}{rgb}{0.8,0.1,0.5}
+\definecolor{webgreen}{rgb}{0,.5,0}
+\definecolor{bgcolor}{rgb}{0.92,0.92,0.92}
+
+\makeatletter
+\renewcommand\@cite[2]{\textsuperscript{[#1]}} % 将引用变为右上角的形式
+\makeatother
+
+\hypersetup{
+    citecolor=black,  % 修改文献引用的颜色为黑色
+}
+
+\lstset{
+    breaklines = true,                                   % 自动将长的代码行换行排版
+    extendedchars=false,                                 % 解决代码跨页时，章节标题，页眉等汉字不显示的问题
+    columns=fixed,       
+    numbers=left,                                        % 在左侧显示行号
+    basicstyle=\zihao{-5}\ttfamily,
+    numberstyle=\small,
+    frame=none,                                          % 不显示背景边框
+    % backgroundcolor=\color[RGB]{245,245,244},            % 设定背景颜色
+    keywordstyle=\color[RGB]{40,40,255},                 % 设定关键字颜色
+    numberstyle=\footnotesize\color{darkgray},           % 设定行号格式
+    commentstyle=\it\color[RGB]{0,96,96},                % 设置代码注释的格式
+    stringstyle=\rmfamily\slshape\color[RGB]{128,0,0},   % 设置字符串格式
+    showstringspaces=false,                              % 不显示字符串中的空格
+    % frame=leftline,topline,rightline, bottomline         %分别对应只在左侧，上方，右侧，下方有竖线
+    frame=shadowbox,                                     % 设置阴影
+    rulesepcolor=\color{red!20!green!20!blue!20},        % 阴影颜色
+    basewidth=0.6em,
+}
+
+\lstdefinestyle{CPP}{
+    language=c++,                                        % 设置语言
+    morekeywords={alignas,continute,friend,register,true,alignof,decltype,goto,
+    reinterpret_cast,try,asm,defult,if,return,typedef,auto,delete,inline,short,
+    typeid,bool,do,int,signed,typename,break,double,long,sizeof,union,case,
+    dynamic_cast,mutable,static,unsigned,catch,else,namespace,static_assert,using,
+    char,enum,new,static_cast,virtual,char16_t,char32_t,explict,noexcept,struct,
+    void,export,nullptr,switch,volatile,class,extern,operator,template,wchar_t,
+    const,false,private,this,while,constexpr,float,protected,thread_local,
+    const_cast,for,public,throw,std},
+    emph={map,set,multimap,multiset,unordered_map,unordered_set,
+    unordered_multiset,unordered_multimap,vector,string,list,deque,
+    array,stack,forwared_list,iostream,memory,shared_ptr,unique_ptr,
+    random,bitset,ostream,istream,cout,cin,endl,move,default_random_engine,
+    uniform_int_distribution,iterator,algorithm,functional,bing,numeric,},
+    emphstyle=\color{CPPViolet}, 
+}
+
+\lstdefinestyle{Java}{
+    language=[AspectJ]Java,
+    keywordstyle=\color{keywordcolor}\bfseries
+}
+
+\lstdefinestyle{Python}{
+    language=Python,
+}
+\newtheorem{theorem}{定理}
+\newtheorem{lemma}{引理}
+\newtheorem{proposition}{命题}
+\newtheorem{definition}{定义}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\sign}{\operatorname{sign}}
+
+%%-------------------------------正文开始---------------------------%%
+\begin{document}
+
+%%-----------------------封面--------------------%%
+\cover
+
+%%------------------摘要-------------%%
+\begin{abstract}
+%
+XXXXX\\
+\textbf{关键词：}XXX
+%
+\end{abstract}
+
+%%--------------------------目录页------------------------%%
+\newpage
+\tableofcontents
+\thispagestyle{empty} % 目录不显示页码
+
+%%------------------------正文页从这里开始-------------------%
+\newpage
+\setcounter{page}{1} % 让页码从正文开始编号
+
+%%可选择这里也放一个标题
+\begin{center}
+    \title{ \Huge \textbf{} }
+\end{center}
+
+
+\thispagestyle{empty} % 首页不显示页码
+
+
+\section{基本设定与增广记号}
+\begin{enumerate}
+  \item 训练集 $\{(x_i,y_i)\}_{i=1}^n$, $x_i\in\R^d$, $y_i\in\{\pm1\}$；线性分类器 $f(x)=w\cdot x+b$，超平面 $H=\{x:w\cdot x+b=0\}$。
+  \item 增广向量：$\tilde x=(x,1)\in\R^{d+1}$，$\tilde w=(w,b)\in\R^{d+1}$，则 $f(x)=\tilde w\cdot\tilde x$；在 $d{+}1$ 维里用过原点超平面统一表示一般超平面。
+  \item 预测 $\hat y(x)=\sign(f(x))$；分类约束 $y_i(w\cdot x_i+b)\ge 0$。
+\end{enumerate}
+
+\section{$x$-space 与 $w$-space 的几何对偶}
+\subsection{点–超平面对偶与分类约束的两种视角}
+\begin{proposition}[对偶关系]
+在 $x$-space：超平面 $\{z:w\cdot z+b=0\}$ 对应法向量 $w$；在 $w$-space：样本 $x$ 诱导超平面 $\{z:x\cdot z+b=0\}$。存在等价式
+\[
+x\in\{z:w\cdot z+b=0\}\iff w\in\{z:x\cdot z+b=0\}.
+\]
+\end{proposition}
+\noindent 结论：把“在 $x$-space 找超平面”转化为“在 $w$-space 找点”。分类约束 $y_i(w\cdot x_i+b)\ge 0$ 在 $x$-space 表示样本在边界正确侧；在 $w$-space 表示 $w$ 在样本诱导超平面的正确侧。所有半空间的交集为 $w$ 的可行域。
+
+\subsection{“$w$ 既是向量又是点”的说明}
+参数 $w=(w_1,\dots,w_d)$ 在 $w$-space 中是点的坐标；在 $x$-space 中表现为法向量。优化问题“找 $w$”即“在 $\R^d$ 中找点”。
+
+\section{风险函数、形状与梯度}
+\subsection{仅误分类计损的风险与感知机损失}
+\begin{enumerate}
+  \item 仅误分类计损的风险函数
+  \[
+  R(w,b)=\sum_{i\in V}-y_i\,(w\cdot x_i+b),\quad V=\{i:\ y_i(w\cdot x_i+b)<0\}.
+  \]
+  它在 $w$-space 呈分段线性凸“折面”，折痕与样本诱导直线对齐；$R=0$ 的底部扇区即全体正确分类解集。
+  \item 感知机（凸）损失 $L_i(w,b)=\max(0,-y_i(w\cdot x_i+b))$，经验风险 $F(w,b)=\frac1n\sum_i L_i$；两者在误分类处的（次）梯度方向一致。
+\end{enumerate}
+
+\subsection{梯度、最速下降与更新}
+\begin{enumerate}
+  \item 多元一阶泰勒 $f(w+\Delta)\approx f(w)+\nabla f(w)^\top\Delta$；令 $\Delta=-\eta\nabla f(w)$ 得
+  \[
+  w^{(t+1)}=w^{(t)}-\eta\,\nabla f\big(w^{(t)}\big).
+  \]
+  \item 对 $R$ 的梯度：$\nabla_w R(w)=-\sum_{i\in V}y_i x_i,\ \partial_b R(w)=-\sum_{i\in V}y_i$。对 $L_i$：若 $y_i(w\cdot x_i+b)<0$，则 $\partial_w L_i=-y_i x_i,\ \partial_b L_i=-y_i$，否则为 $0$。
+\end{enumerate}
+
+\section{GD 与 SGD：定义、复杂度与在线性}
+\subsection{两种下降}
+\begin{enumerate}
+  \item 全量 GD：$w\leftarrow w-\eta\,\nabla F(w)$，每步 $O(nd)$，方向平稳。
+  \item SGD：随机抽样 $i$，$w\leftarrow w-\eta\,\nabla L_i(w)$，每步 $O(d)$；由于 $F=\frac1n\sum_i L_i$，有 $\mathbb E[\nabla L_i(w)]=\nabla F(w)$，单步有噪声但无偏。
+\end{enumerate}
+\subsection{在线算法与步长}
+\begin{enumerate}
+  \item 感知机是在线算法：新样本到来可继续迭代。
+  \item 步长 $\eta$ 不出现在错误次数的大 $O$ 上界，但实际运行时间对 $\eta$ 敏感：$\eta$ 太小则慢；太大则可能跨越零风险区、在边界两侧振荡。可用线搜索、自适应步长或直接改用二次规划。
+\end{enumerate}
+
+\section{偏置与“增加一维”的统一}
+\begin{enumerate}
+  \item 一般超平面 $w\cdot x+\alpha=0$ 可通过增广 $\tilde x=(x,1)$、$\tilde w=(w,\alpha)$ 统一为 $\tilde w\cdot\tilde x=0$，从而用一条更新式覆盖 $w$ 与偏置。
+  \item 在 $d{+}1$ 维空间中，训练点共面于 $x_{d+1}=1$ 的切片，仍可直接运行感知机或其他线性分类算法。
+\end{enumerate}
+
+\section{凸优化与 SGD 收敛}
+\begin{enumerate}
+  \item 最小化凸函数：局部极小即全局极小；合适步长（如衰减序列）下，SGD 在凸光滑情形以期望收敛。
+  \item 非凸目标（如深度网络）通常无法保证全局最优，但 SGD 仍实用；在本课的线性可分与感知机损失场景下，存在更强的有限步收敛结论。
+\end{enumerate}
+
+\section{感知机收敛定理与错误上界}
+\subsection{陈述与参数}
+定义半径 $R=\max_i\|\tilde x_i\|$。若存在单位向量 $\|\tilde w^\star\|=1$ 使得几何间隔下界
+\[
+\gamma=\min_i y_i(\tilde w^\star\cdot\tilde x_i)>0,
+\]
+则在线更新（仅误分类样本）$\tilde w\leftarrow\tilde w+\eta\,y_i\tilde x_i$ 的犯错次数 $T$ 满足
+\[
+T\le\Big(\frac{R}{\gamma}\Big)^2\frac{1}{\eta^2}.
+\]
+常用归一化 $R\le1,\ \eta=1$ 时，$T\le 1/\gamma^2$。
+
+\subsection{证明（Novikoff）}
+\begin{enumerate}
+  \item 投影线性累增：每次犯错使 $\langle\tilde w^{(t+1)},\tilde w^\star\rangle\ge \langle\tilde w^{(t)},\tilde w^\star\rangle+\eta\gamma$，累加得 $\langle\tilde w^{(T)},\tilde w^\star\rangle\ge T\eta\gamma$。
+  \item 范数二次受限：犯错时 $y_t(\tilde w^{(t)}\cdot\tilde x_t)<0$，故 $\|\tilde w^{(t+1)}\|^2\le \|\tilde w^{(t)}\|^2+\eta^2\|\tilde x_t\|^2\le \|\tilde w^{(t)}\|^2+\eta^2R^2$，从而 $\|\tilde w^{(T)}\|\le \eta R\sqrt{T}$。
+  \item Cauchy--Schwarz：$T\eta\gamma\le \|\tilde w^{(T)}\|\le \eta R\sqrt{T}$，解得结论。
+\end{enumerate}
+
+\section{间隔（margin）的本质与最大化间隔}
+\subsection{函数间隔与几何间隔}
+\begin{definition}[函数间隔]
+$\hat\gamma_i=y_i(w\cdot x_i+\alpha)$，受 $w$ 的缩放影响。
+\end{definition}
+\begin{definition}[几何间隔]
+$\gamma_i=\dfrac{y_i(w\cdot x_i+\alpha)}{\|w\|}$ 为点到超平面的带符号欧氏距离，整体间隔 $\gamma=\min_i\gamma_i$。
+\end{definition}
+
+\subsection{定标、条带与最大化}
+为消除缩放不定性并排除 $w=0$，施加
+\[
+y_i(w\cdot x_i+\alpha)\ge 1,\quad i=1,\dots,n.
+\]
+此时最近样本（支持向量）满足等式，故
+\[
+\gamma=\frac{1}{\|w\|},\qquad \text{条带宽度}=2/\|w\|,\quad \text{中线 }w\cdot x+\alpha=0.
+\]
+最大化间隔等价于最小化 $\|w\|$（实际用光滑的 $\tfrac12\|w\|^2$）。
+
+\section{硬间隔 SVM 的凸二次规划与权重空间几何}
+\subsection{原始问题（线性可分）}
+\[
+\boxed{\ \min_{w,\alpha}\ \frac12\|w\|^2\quad \text{s.t.}\quad y_i(w\cdot x_i+\alpha)\ge 1,\ i=1,\dots,n.\ }
+\]
+\begin{enumerate}
+  \item 目标严格凸、约束线性，线性可分时解唯一；最优几何间隔为 $1/\|w\|$。
+  \item 采用 $\|w\|^2$ 而非 $\|w\|$ 的理由是可微性与计算便利，解不变。
+\end{enumerate}
+
+\subsection{权重空间三维/截面直观}
+\begin{enumerate}
+  \item 在 $(w_1,w_2,\alpha)$ 空间，每个训练点诱导一个线性约束平面；可行域为这些半空间交集。
+  \item 目标只惩罚 $w$ 的长度（到 $\alpha$ 轴的水平距离），最优解是可行域中离 $\alpha$ 轴最近的点；二维截面中呈若干直线交点（支持向量）给定的解。
+\end{enumerate}
+
+\section{从感知机到 SVM：动机与实践}
+\begin{enumerate}
+  \item 感知机只求可分，解不唯一、对步长敏感、整体仍可能慢；SVM 通过最大化间隔给出唯一且鲁棒的解，二次规划求解更稳定高效。
+  \item 数据不可分时，引入软间隔 $y_i(w\cdot x_i+\alpha)\ge 1-\xi_i,\ \xi_i\ge0$ 并最小化 $\frac12\|w\|^2+C\sum_i\xi_i$；进一步可用核方法得到非线性边界。
+\end{enumerate}
+
+\section{历史与备注}
+\begin{enumerate}
+  \item Rosenblatt（1957）在康奈尔航空实验室提出并以硬件实现 Mark I 感知机（用于 $20\times20$ 像素图像），感知机是深度学习历史的起点之一。
+  \item 现代优化与统计学习理论推动了从“可分即可”到“最大间隔与泛化”的转变。
+\end{enumerate}
+
+\section{常见疑问与澄清}
+\begin{enumerate}
+  \item “最优点是否一定在超平面交点”：最优解位于可行域边界；在 $d$ 维可为若干约束的交点/交线/交面。
+  \item “是否降维”：属于解集自由度因约束而降低，并非数据维度降维（不同于 PCA）。
+  \item “为何用 $-\nabla f$ 更新”：来自多元一阶泰勒与最速下降方向。
+  \item “单样本梯度为何无偏”：$F=\frac1n\sum_i L_i \Rightarrow \nabla F=\frac1n\sum_i\nabla L_i$，均匀抽样 $\mathbb E[\nabla L_i]=\nabla F$。
+  \item “为何右端取 $1$ 而非 $0$”：消除缩放不定性、排除 $w=0$，并让几何间隔与 $\|w\|$ 建立一一关系，从而把“最大化间隔”转为“最小化 $\|w\|$”。
+\end{enumerate}
+
+
+
+%%----------- 参考文献 -------------------%%
+%在reference.bib文件中填写参考文献，此处自动生成
+\newpage
+\reference
+
+
+\end{document}
