@@ -1,0 +1,237 @@
+%!TeX program = xelatex
+\documentclass[10.5pt,hyperref,a4paper,UTF8]{ctexart}
+\usepackage{RUCReport}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{threeparttable}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{subcaption}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{float}
+\geometry{a4paper, margin=1in}
+\renewcommand\thesubfigure{\arabic{subfigure}} % 子图编号改为中文小写
+% 定义可能使用到的颜色
+\definecolor{CPPLight}  {HTML} {686868}
+\definecolor{CPPSteel}  {HTML} {888888}
+\definecolor{CPPDark}   {HTML} {262626}
+\definecolor{CPPBlue}   {HTML} {4172A3}
+\definecolor{CPPGreen}  {HTML} {487818}
+\definecolor{CPPBrown}  {HTML} {A07040}
+\definecolor{CPPRed}    {HTML} {AD4D3A}
+\definecolor{CPPViolet} {HTML} {7040A0}
+\definecolor{CPPGray}  {HTML} {B8B8B8}
+\definecolor{keywordcolor}{rgb}{0.8,0.1,0.5}
+\definecolor{webgreen}{rgb}{0,.5,0}
+\definecolor{bgcolor}{rgb}{0.92,0.92,0.92}
+
+\makeatletter
+\renewcommand\@cite[2]{\textsuperscript{[#1]}} % 将引用变为右上角的形式
+\makeatother
+
+\hypersetup{
+    citecolor=black,  % 修改文献引用的颜色为黑色
+}
+
+\lstset{
+    breaklines = true,                                   % 自动将长的代码行换行排版
+    extendedchars=false,                                 % 解决代码跨页时，章节标题，页眉等汉字不显示的问题
+    columns=fixed,       
+    numbers=left,                                        % 在左侧显示行号
+    basicstyle=\zihao{-5}\ttfamily,
+    numberstyle=\small,
+    frame=none,                                          % 不显示背景边框
+    % backgroundcolor=\color[RGB]{245,245,244},            % 设定背景颜色
+    keywordstyle=\color[RGB]{40,40,255},                 % 设定关键字颜色
+    numberstyle=\footnotesize\color{darkgray},           % 设定行号格式
+    commentstyle=\it\color[RGB]{0,96,96},                % 设置代码注释的格式
+    stringstyle=\rmfamily\slshape\color[RGB]{128,0,0},   % 设置字符串格式
+    showstringspaces=false,                              % 不显示字符串中的空格
+    % frame=leftline,topline,rightline, bottomline         %分别对应只在左侧，上方，右侧，下方有竖线
+    frame=shadowbox,                                     % 设置阴影
+    rulesepcolor=\color{red!20!green!20!blue!20},        % 阴影颜色
+    basewidth=0.6em,
+}
+
+\lstdefinestyle{CPP}{
+    language=c++,                                        % 设置语言
+    morekeywords={alignas,continute,friend,register,true,alignof,decltype,goto,
+    reinterpret_cast,try,asm,defult,if,return,typedef,auto,delete,inline,short,
+    typeid,bool,do,int,signed,typename,break,double,long,sizeof,union,case,
+    dynamic_cast,mutable,static,unsigned,catch,else,namespace,static_assert,using,
+    char,enum,new,static_cast,virtual,char16_t,char32_t,explict,noexcept,struct,
+    void,export,nullptr,switch,volatile,class,extern,operator,template,wchar_t,
+    const,false,private,this,while,constexpr,float,protected,thread_local,
+    const_cast,for,public,throw,std},
+    emph={map,set,multimap,multiset,unordered_map,unordered_set,
+    unordered_multiset,unordered_multimap,vector,string,list,deque,
+    array,stack,forwared_list,iostream,memory,shared_ptr,unique_ptr,
+    random,bitset,ostream,istream,cout,cin,endl,move,default_random_engine,
+    uniform_int_distribution,iterator,algorithm,functional,bing,numeric,},
+    emphstyle=\color{CPPViolet}, 
+}
+
+\lstdefinestyle{Java}{
+    language=[AspectJ]Java,
+    keywordstyle=\color{keywordcolor}\bfseries
+}
+
+\lstdefinestyle{Python}{
+    language=Python,
+}
+
+
+%%-------------------------------正文开始---------------------------%%
+\begin{document}
+
+%%-----------------------封面--------------------%%
+\cover
+
+%%------------------摘要-------------%%
+\begin{abstract}
+%
+XXXXX\\
+\textbf{关键词：}XXX
+%
+\end{abstract}
+
+%%--------------------------目录页------------------------%%
+\newpage
+\tableofcontents
+\thispagestyle{empty} % 目录不显示页码
+
+%%------------------------正文页从这里开始-------------------%
+\newpage
+\setcounter{page}{1} % 让页码从正文开始编号
+
+%%可选择这里也放一个标题
+\begin{center}
+    \title{ \Huge \textbf{} }
+\end{center}
+
+
+\thispagestyle{empty} % 首页不显示页码
+
+
+\section{问题设定与基本概念}
+给定 $n$ 个样本，特征维度为 $d$。每个样本 $X_i\in\mathbb{R}^d$，部分属于类别 $C$，其余不属于 $C$。将样本视为 $\mathbb{R}^d$ 中的点。
+
+\textbf{判别函数／预测函数／判别式}（discriminant function）定义为标量函数 $f(x)$，满足
+\[
+f(x)>0\Rightarrow x\in C,\qquad f(x)\le 0\Rightarrow x\notin C.
+\]
+\textbf{决策边界}（decision boundary）定义为零水平集
+\[
+\{x\in\mathbb{R}^d: f(x)=0\}.
+\]
+它通常是 $\mathbb{R}^d$ 中的一个 $(d-1)$ 维曲面，即 $f$ 在等值 $0$ 处的\textbf{等值面}（isosurface）；类似地还有 $\{x:f(x)=1\}$ 等其它等值面。过度贴合训练集而产生蜿蜒曲线将导致\textbf{过拟合}。
+
+\section{线性分类器与超平面}
+若取线性判别函数
+\[
+f(x)=w\cdot x+\alpha,
+\]
+则决策边界为
+\[
+H=\{x:w\cdot x=-\alpha\},
+\]
+称 $H$ 为\textbf{超平面}（$d{=}2$ 为直线，$d{=}3$ 为平面）。超平面的三条核心性质：
+\begin{enumerate}
+  \item 维度为 $d-1$，将 $\mathbb{R}^d$ 切分为两半；
+  \item 平直（由一次方程定义，无曲率）；
+  \item 无界（无限延伸）。
+\end{enumerate}
+
+\subsection{法向量与正交性质}
+若 $x,y\in H$，则
+\[
+w\cdot (y-x)=0.
+\]
+因此 $w$ 垂直于 $H$ 上的任意方向，$w$ 称为 $H$ 的\textbf{法向量}。
+
+\subsection{带符号距离与原点距离}
+若 $w$ 为单位向量，则 $f(x)=w\cdot x+\alpha$ 是点到超平面 $H$ 的\textbf{带符号距离}，正负号由法向量一侧决定；$H$ 到原点的距离为 $|\alpha|$，且 $\alpha=0$ 当且仅当 $H$ 过原点。若 $w$ 非单位向量，可将 $w,\alpha$ 同时除以 $\|w\|$ 归一化。$w$ 与 $\alpha$ 的系数统称为\textbf{权重／回归系数}（weights）。
+
+\subsection{点到超平面的距离（通式）}
+对任意 $w\ne 0$，点 $x_0$ 到 $H:\ w\cdot x+\alpha=0$ 的距离
+\[
+d(x_0,H)=\frac{|w\cdot x_0+\alpha|}{\|w\|}.
+\]
+当 $w$ 为单位向量时，$f(x)$ 即上述距离的带符号形式。
+
+\section{质心法（Centroid Method）}
+记正类与负类（非 $C$）的样本均值为
+\[
+\mu_C=\frac{1}{|C|}\sum_{X_i\in C}X_i,\qquad
+\mu_X=\frac{1}{|X|}\sum_{X_i\notin C}X_i.
+\]
+采用判别函数
+\[
+f(x)=(\mu_C-\mu_X)\cdot x-(\mu_C-\mu_X)\cdot\frac{\mu_C+\mu_X}{2}.
+\]
+几何意义：法向量为 $\mu_C-\mu_X$；决策边界为连接 $\mu_C$ 与 $\mu_X$ 线段的\textbf{垂直平分超平面}。在某些数据上（即便线性可分）此方法仍可能误分；但当正负类分别来自两个高斯分布且协方差矩阵相同时，常表现良好。亦可调节标量项 $\alpha$（不改变法向量）以减少误分。
+
+\paragraph{与贝叶斯最优分类器的联系}
+若 $x|C_k\sim \mathcal{N}(\mu_k,\sigma^2 I)$ 且先验相近，则
+\[
+\log p(x|C_1)-\log p(x|C_2)\propto
+-\tfrac{1}{2\sigma^2}\!\left(\|x-\mu_1\|^2-\|x-\mu_2\|^2\right),
+\]
+等价于“判给更近的质心”。此时质心法与 LDA 的线性边界一致，达到贝叶斯最优；若协方差不同，则最优边界为二次曲面（QDA）。
+
+\section{线性可分与感知机（Perceptron）}
+\textbf{线性可分}：存在某个超平面能将全部训练点正确划分。
+
+\subsection{算法设定}
+样本行向量 $X_i$ 存于矩阵 $X$ 的第 $i$ 行，标签
+\[
+y_i=\begin{cases}
+1,& X_i\in C,\\
+-1,& X_i\notin C.
+\end{cases}
+\]
+为简便先考虑过原点的边界（后续可加偏置）。
+
+\subsection{约束、损失与风险}
+目标是找到 $w$ 使
+\[
+y_i(X_i\cdot w)\ge 0\quad(\forall i).
+\]
+定义分段线性\textbf{损失函数}
+\[
+L(z,y_i)=
+\begin{cases}
+0,& y_i z\ge 0,\\
+-\,y_i z,& y_i z<0,
+\end{cases}
+\]
+并令\textbf{风险函数}
+\[
+R(w)=\frac{1}{n}\sum_{i=1}^n L(X_i\cdot w,y_i)
+=\frac{1}{n}\sum_{i:\,y_iX_i\cdot w<0}\!\!\!\!\big(-y_i\,X_i\cdot w\big).
+\]
+若 $w$ 正确分类全部样本则 $R(w)=0$；否则 $R(w)>0$，训练目标为
+\[
+\min_w R(w).
+\]
+
+\subsection{与梯度下降的关系与更新}
+对误分类样本 $i$，有 $\nabla_w L(X_i\cdot w,y_i)=-y_i X_i$。随机梯度下降更新为
+\[
+w\leftarrow w-\eta\,\nabla_w L
+= w+\eta\,y_i X_i,
+\]
+当学习率 $\eta=1$ 即经典感知机更新。感知机针对线性可分数据“慢但正确”；若数据不可分则不收敛。它不追求最大间隔，鲁棒性不如 SVM。
+
+
+
+
+
+%%----------- 参考文献 -------------------%%
+%在reference.bib文件中填写参考文献，此处自动生成
+\newpage
+\reference
+
+
+\end{document}
