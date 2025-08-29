@@ -1,0 +1,416 @@
+%!TeX program = xelatex
+\documentclass[10.5pt,hyperref,a4paper,UTF8]{ctexart}
+\usepackage{RUCReport}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{threeparttable}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{subcaption}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{float}
+\geometry{a4paper, margin=1in}
+\renewcommand\thesubfigure{\arabic{subfigure}} % 子图编号改为中文小写
+% 定义可能使用到的颜色
+\definecolor{CPPLight}  {HTML} {686868}
+\definecolor{CPPSteel}  {HTML} {888888}
+\definecolor{CPPDark}   {HTML} {262626}
+\definecolor{CPPBlue}   {HTML} {4172A3}
+\definecolor{CPPGreen}  {HTML} {487818}
+\definecolor{CPPBrown}  {HTML} {A07040}
+\definecolor{CPPRed}    {HTML} {AD4D3A}
+\definecolor{CPPViolet} {HTML} {7040A0}
+\definecolor{CPPGray}  {HTML} {B8B8B8}
+\definecolor{keywordcolor}{rgb}{0.8,0.1,0.5}
+\definecolor{webgreen}{rgb}{0,.5,0}
+\definecolor{bgcolor}{rgb}{0.92,0.92,0.92}
+
+\makeatletter
+\renewcommand\@cite[2]{\textsuperscript{[#1]}} % 将引用变为右上角的形式
+\makeatother
+
+\hypersetup{
+    citecolor=black,  % 修改文献引用的颜色为黑色
+}
+
+\lstset{
+    breaklines = true,                                   % 自动将长的代码行换行排版
+    extendedchars=false,                                 % 解决代码跨页时，章节标题，页眉等汉字不显示的问题
+    columns=fixed,       
+    numbers=left,                                        % 在左侧显示行号
+    basicstyle=\zihao{-5}\ttfamily,
+    numberstyle=\small,
+    frame=none,                                          % 不显示背景边框
+    % backgroundcolor=\color[RGB]{245,245,244},            % 设定背景颜色
+    keywordstyle=\color[RGB]{40,40,255},                 % 设定关键字颜色
+    numberstyle=\footnotesize\color{darkgray},           % 设定行号格式
+    commentstyle=\it\color[RGB]{0,96,96},                % 设置代码注释的格式
+    stringstyle=\rmfamily\slshape\color[RGB]{128,0,0},   % 设置字符串格式
+    showstringspaces=false,                              % 不显示字符串中的空格
+    % frame=leftline,topline,rightline, bottomline         %分别对应只在左侧，上方，右侧，下方有竖线
+    frame=shadowbox,                                     % 设置阴影
+    rulesepcolor=\color{red!20!green!20!blue!20},        % 阴影颜色
+    basewidth=0.6em,
+}
+
+\lstdefinestyle{CPP}{
+    language=c++,                                        % 设置语言
+    morekeywords={alignas,continute,friend,register,true,alignof,decltype,goto,
+    reinterpret_cast,try,asm,defult,if,return,typedef,auto,delete,inline,short,
+    typeid,bool,do,int,signed,typename,break,double,long,sizeof,union,case,
+    dynamic_cast,mutable,static,unsigned,catch,else,namespace,static_assert,using,
+    char,enum,new,static_cast,virtual,char16_t,char32_t,explict,noexcept,struct,
+    void,export,nullptr,switch,volatile,class,extern,operator,template,wchar_t,
+    const,false,private,this,while,constexpr,float,protected,thread_local,
+    const_cast,for,public,throw,std},
+    emph={map,set,multimap,multiset,unordered_map,unordered_set,
+    unordered_multiset,unordered_multimap,vector,string,list,deque,
+    array,stack,forwared_list,iostream,memory,shared_ptr,unique_ptr,
+    random,bitset,ostream,istream,cout,cin,endl,move,default_random_engine,
+    uniform_int_distribution,iterator,algorithm,functional,bing,numeric,},
+    emphstyle=\color{CPPViolet}, 
+}
+
+\lstdefinestyle{Java}{
+    language=[AspectJ]Java,
+    keywordstyle=\color{keywordcolor}\bfseries
+}
+
+\lstdefinestyle{Python}{
+    language=Python,
+}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\norm}[1]{\left\lVert #1\right\rVert}
+\newcommand{\inner}[2]{\left\langle #1,#2\right\rangle}
+
+\theoremstyle{definition}
+\newtheorem{definition}{定义}
+\newtheorem{theorem}{定理}
+\newtheorem{proposition}{命题}
+\newtheorem{remark}{说明}
+\newtheorem{example}{例}
+%%-------------------------------正文开始---------------------------%%
+\begin{document}
+
+%%-----------------------封面--------------------%%
+\cover
+
+%%------------------摘要-------------%%
+\begin{abstract}
+%
+XXXXX\\
+\textbf{关键词：}XXX
+%
+\end{abstract}
+
+%%--------------------------目录页------------------------%%
+\newpage
+\tableofcontents
+\thispagestyle{empty} % 目录不显示页码
+
+%%------------------------正文页从这里开始-------------------%
+\newpage
+\setcounter{page}{1} % 让页码从正文开始编号
+
+%%可选择这里也放一个标题
+\begin{center}
+    \title{ \Huge \textbf{} }
+\end{center}
+
+
+\thispagestyle{empty} % 首页不显示页码
+
+
+\section{问题背景与动机}
+\subsection{硬间隔 SVM 的局限}
+硬间隔 SVM 追求在训练集上严格线性可分并最大化间隔，但
+\begin{enumerate}
+  \item 当数据不可线性可分时无可行解；
+  \item 对离群点高度敏感：单一点可显著改变最大间隔超平面；
+  \item 过于强调零训练误差，泛化受损。
+\end{enumerate}
+
+\subsection{软间隔思想}
+允许少量样本违反间隔（甚至被误分），用\emph{松弛变量}刻画违约程度，在目标函数中惩罚之。几何上仍保持较宽的间隔，从而提升鲁棒性。
+
+\section{软间隔 SVM：约束、几何与优化}
+\subsection{松弛变量与几何解释}
+给定样本 $\{(x_i,y_i)\}_{i=1}^n$, $x_i\in\R^d$, $y_i\in\{\pm1\}$，判别函数
+\[
+f(x)=\bm w^\top x+\alpha.
+\]
+引入 $\xi_i\ge0$，把硬间隔约束
+\[
+y_i(\bm w^\top x_i+\alpha)\ge1
+\]
+放宽为
+\[
+y_i(\bm w^\top x_i+\alpha)\ge1-\xi_i,\qquad \xi_i\ge0.
+\]
+几何分类：
+\begin{enumerate}
+  \item $\xi_i=0$：样本在正确一侧且在间隔之外；
+  \item $0<\xi_i<1$：样本落入间隔区但仍正确分类；
+  \item $\xi_i\ge1$：样本被误分。
+\end{enumerate}
+软间隔的宽度仍定义为 $2/\norm{\bm w}$；与硬间隔不同，最近训练点可侵入间隔。
+
+\subsection{原始问题（QP）与参数 \(C\)}
+\begin{equation}\label{eq:primal}
+\begin{aligned}
+\min_{\bm w,\alpha,\bm\xi}\quad & \frac{1}{2}\norm{\bm w}^2 + C\sum_{i=1}^n \xi_i\\
+\text{s.t.}\quad & y_i(\bm w^\top x_i+\alpha)\ge 1-\xi_i,\ i=1,\dots,n,\\
+& \xi_i\ge0,\ i=1,\dots,n.
+\end{aligned}
+\end{equation}
+式 \eqref{eq:primal} 为二次规划：目标二次、约束线性。\emph{正则化超参数} $C>0$ 在“最大化间隔”与“最小化训练误差”之间做权衡。
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+& $C$ 小 & $C$ 大\\
+\midrule
+期望 & 更大间隔 $1/\norm{\bm w}$ & 使大多数 $\xi_i$ 逼近 $0$\\
+风险 & 欠拟合（训练误差偏大） & 过拟合（对噪声敏感）\\
+对离群点 & 不敏感 & 极敏感\\
+\bottomrule
+\end{tabular}
+\end{center}
+选择 $C$ 通常用验证（交叉验证）完成。
+
+\subsection{偏置与同质化}
+原空间中 $f(x)=\bm w^\top x+\alpha$；同质化升维为
+\[
+x'=(x,1),\quad w'=(\bm w,\alpha),\quad f(x)=w'^\top x'.
+\]
+注意 $\,\bm w^\top(x+\alpha)\,$ 无意义（维度不匹配）。
+
+\section{非线性边界：特征与升维}
+\subsection{总路线}
+问题：在原空间不可线性可分。策略：构造非线性特征映射 $\Phi:\R^d\to\R^D$，在高维 $\Phi$-空间用\emph{线性}分类器，得到原空间的\emph{非线性}边界。
+
+\subsection{抛物提升映射：球面 \(\leftrightarrow\) 超平面}
+取
+\[
+\Phi(x)=\begin{bmatrix}x\\ \norm{x}^2\end{bmatrix}\in\R^{d+1}.
+\]
+\begin{theorem}[球 \(\leftrightarrow\) 超平面等价]
+设原空间球 $\{x:\norm{x-c}^2<\rho^2\}$。则
+\[
+\norm{x-c}^2<\rho^2
+\iff
+\underbrace{\begin{bmatrix}-2c^\top&1\end{bmatrix}}_{\text{法向量}}
+\underbrace{\begin{bmatrix}x\\ \norm{x}^2\end{bmatrix}}_{\Phi(x)}
+<\rho^2-\norm{c}^2,
+\]
+即“球内”$\Leftrightarrow$“升维后超平面之下”。超平面是半径 $\to\infty$ 的球的退化情形。
+\end{theorem}
+
+\subsection{二次曲面（Quadrics）与二次特征}
+三维的一般二次曲面
+\[
+Ax_1^2+Bx_2^2+Cx_3^2+Dx_1x_2+Ex_2x_3+Fx_3x_1+Gx_1+Hx_2+Ix_3+\alpha=0.
+\]
+令
+\[
+\Phi(x)=[x_1^2,x_2^2,x_3^2,\ x_1x_2,x_2x_3,x_3x_1,\ x_1,x_2,x_3]^\top,
+\]
+则任意二次边界可写为线性形式 $f(x)=\bm w^\top\Phi(x)+\alpha$。当 $d$ 大时交叉项数量为 $\mathcal{O}(d^2)$，计算代价显著；若仅保留平方项 $x_j^2$，新增维度线性增长，但边界\emph{只能与坐标轴对齐}（不可任意旋转）。
+
+\subsection{一般 $p$ 次多项式边界与升维的普适性}
+任意次数 $\le p$ 的多项式
+\[
+f(x)=\sum_{|\alpha|\le p} c_\alpha\,x^\alpha,\qquad x^\alpha=\prod_{j=1}^dx_j^{\alpha_j},
+\]
+通过构造 $\Phi(x)$ 为所有次数 $\le p$ 的单项式集合（维度 $\binom{d+p}{p}$），都有
+\[
+f(x)=\bm w^\top\Phi(x),
+\]
+从而在 $\Phi$-空间线性化。这一结论说明：\emph{所有多项式形状的边界皆可通过合适升维变为超平面}。但维度随 $p$ 呈 $\mathcal{O}(d^p)$ 爆炸。
+
+\subsection{核技巧（Kernel Trick）}
+对偶形式仅依赖 $\inner{\Phi(x_i)}{\Phi(x)}$。定义核函数
+\[
+K(x,z)=\inner{\Phi(x)}{\Phi(z)},
+\]
+即可无需显式计算 $\Phi$ 而在高维求解。典型示例：多项式核 $K(x,z)=(x^\top z+c)^p$、RBF 核等。核化使高阶多项式在计算上可行。
+
+\section{次数、间隔与泛化：复杂度权衡}
+\subsection{提高次数的双重效应}
+\begin{enumerate}
+  \item 充分高的次数可使原本不可分的数据在高维变为\emph{线性可分}；
+  \item 次数升高常见到\emph{更宽的有效间隔}（在合适的正则下），但过高会过拟合。
+\end{enumerate}
+
+\subsection{训练与测试误差随复杂度的典型曲线}
+随模型复杂度（例如次数 $p$ 或等效自由度）上升，训练误差单调下降；测试误差先降后升。最佳点位于两者平衡处（例如二次决策在示例中给出最小测试误差）。
+
+\subsection{与 \(C\) 的联动调参}
+若同时使用多项式特征与软间隔 SVM，需要联合选择
+\begin{enumerate}
+  \item 多项式次数 $p$（控制表示能力）；
+  \item 正则化超参数 $C$（控制容错与间隔）。
+\end{enumerate}
+一般地，不同 $p$ 下的最优 $C$ 不同，改变 $p$ 时应重新验证 $C$。
+
+\section{特征工程：从多项式到任务特定特征}
+\subsection{边缘检测与 HOG}
+在图像任务中，直接使用原始像素对光照/位置/噪声敏感。可先用 Sobel/方向性高斯导数等算子近似梯度，再在局部网格统计\emph{梯度方向直方图}（如每块 12 个方向 bins），拼接为向量作为特征（HOG），再交由线性 SVM 训练。实证对比：像素+线性 SVM 的测试错误率远高于 HOG+线性 SVM（错误率显著下降）。
+\begin{remark}
+该案例表明：合适的任务特征往往比单纯提升模型复杂度更能改善泛化。
+\end{remark}
+
+\section{实践要点与建议}
+\begin{enumerate}
+  \item 先做标准化与特征工程，必要时再用核方法提升表示力；
+  \item 用交叉验证\emph{联合}调参：次数/核参数与 \(C\)；
+  \item 关注鲁棒性：数据含噪/离群点时优先软间隔；
+  \item 维度-计算量-过拟合三者权衡：去交叉项可显著降维，代价是边界受限（轴对齐）。
+\end{enumerate}
+
+\section*{附录A：对偶与核化}
+
+\subsection*{A.1 原始问题与拉格朗日函数}
+软间隔 SVM 的原始（Primal）二次规划为
+\begin{equation}\label{eq:primal_full}
+\begin{aligned}
+\min_{\bm w,\ \alpha,\ \bm\xi}\quad & \frac{1}{2}\|\bm w\|^2 \ +\ C\sum_{i=1}^n \xi_i\\
+\text{s.t.}\quad & y_i(\bm w^\top x_i + \alpha)\ \ge\ 1-\xi_i,\quad i=1,\dots,n,\\
+& \xi_i \ \ge\ 0,\quad i=1,\dots,n,
+\end{aligned}
+\end{equation}
+其中 $x_i\in\mathbb{R}^d,\ y_i\in\{\pm1\}$，$C>0$ 为正则化超参数。引入拉格朗日乘子
+\[
+\lambda_i\ \ge\ 0\quad \text{对应约束 } y_i(\bm w^\top x_i+\alpha)\ge 1-\xi_i,\qquad
+\mu_i\ \ge\ 0\quad \text{对应约束 } \xi_i\ge 0.
+\]
+拉格朗日函数
+\begin{align}
+\mathcal{L}(\bm w,\alpha,\bm\xi;\bm\lambda,\bm\mu)
+&=\frac{1}{2}\|\bm w\|^2 + C\sum_{i=1}^n \xi_i
+- \sum_{i=1}^n \lambda_i\bigl[y_i(\bm w^\top x_i+\alpha)-1+\xi_i\bigr]
+- \sum_{i=1}^n \mu_i \xi_i.\label{eq:Lagrangian}
+\end{align}
+
+\subsection*{A.2 KKT 条件与驻点}
+对 $\bm w,\alpha,\xi_i$ 的一阶驻点条件（Stationarity）:
+\begin{align}
+\frac{\partial \mathcal{L}}{\partial \bm w} &= \bm w - \sum_{i=1}^n \lambda_i y_i x_i = \bm 0
+\ \ \Rightarrow\ \ \bm w^\star = \sum_{i=1}^n \lambda_i y_i x_i, \label{eq:w_star}\\
+\frac{\partial \mathcal{L}}{\partial \alpha} &= -\sum_{i=1}^n \lambda_i y_i = 0
+\ \ \Rightarrow\ \ \sum_{i=1}^n \lambda_i y_i = 0,\label{eq:alpha_cond}\\
+\frac{\partial \mathcal{L}}{\partial \xi_i} &= C - \lambda_i - \mu_i = 0
+\ \ \Rightarrow\ \ 0 \le \lambda_i \le C,\ \ \mu_i = C-\lambda_i.\label{eq:xi_cond}
+\end{align}
+再加上原始可行性（Primal feasibility）
+\[
+y_i(\bm w^\top x_i+\alpha)\ge 1-\xi_i,\quad \xi_i\ge 0,
+\]
+对偶可行性（Dual feasibility）
+\(
+\lambda_i\ge0,\ \mu_i\ge0\ (\Rightarrow 0\le\lambda_i\le C),
+\)
+以及互补松弛（Complementary slackness）:
+\begin{align}
+\lambda_i\bigl[y_i(\bm w^\top x_i+\alpha)-1+\xi_i\bigr] &= 0,\label{eq:cs1}\\
+\mu_i \xi_i &= 0. \label{eq:cs2}
+\end{align}
+由于问题满足 Slater 条件（取 $\bm w=\bm 0,\ \alpha=0,\ \xi_i=2$ 即严格可行），强对偶成立，KKT 为充要最优条件。
+
+\subsection*{A.3 消元得到对偶问题}
+将 \eqref{eq:w_star} 代入 \eqref{eq:Lagrangian} 并最小化掉原始变量，得到\emph{对偶（Dual）}：
+\begin{equation}\label{eq:dual}
+\begin{aligned}
+\max_{\bm\lambda}\quad & 
+\sum_{i=1}^n \lambda_i \ -\ \frac{1}{2}\sum_{i=1}^n\sum_{j=1}^n 
+\lambda_i \lambda_j\, y_i y_j\, (x_i^\top x_j)\\
+\text{s.t.}\quad &
+\sum_{i=1}^n \lambda_i y_i = 0,\qquad 0\le \lambda_i \le C,\ \ i=1,\dots,n.
+\end{aligned}
+\end{equation}
+该目标函数关于 $\bm\lambda$ 为严格凹函数（负半定二次型），带线性约束的凹优化，标准 QP 可用 SMO 等算法求解。
+
+\subsection*{A.4 偏置项的恢复与判别函数}
+求得最优 $\bm\lambda^\star$ 后，由 \eqref{eq:w_star} 有
+\[
+\bm w^\star = \sum_{i=1}^n \lambda_i^\star y_i x_i.
+\]
+对任一\emph{边界支持向量} $k$（满足 $0<\lambda_k^\star<C$，此时 \eqref{eq:cs1} 给出 $y_k(\bm w^{\star\top}x_k+\alpha^\star)=1$），可恢复偏置
+\begin{equation}\label{eq:b_recover}
+\alpha^\star = y_k - \sum_{i=1}^n \lambda_i^\star y_i\, (x_i^\top x_k).
+\end{equation}
+实践中可对所有 $0<\lambda_k^\star<C$ 的样本求得的 \eqref{eq:b_recover} 取平均以减小数值误差。
+最终判别函数为
+\begin{equation}\label{eq:decision}
+f(x) = \operatorname{sign}\!\left(\sum_{i=1}^n \lambda_i^\star y_i\, (x_i^\top x) + \alpha^\star\right).
+\end{equation}
+分类几何解释：间隔宽度为 $2/\|\bm w^\star\|$。样本类型与 KKT 的对应关系：
+\begin{enumerate}
+\item $\lambda_i^\star=0 \Rightarrow \xi_i^\star=0,\ y_i(\bm w^{\star\top}x_i+\alpha^\star)\ge 1$：在间隔外，\emph{非}支持向量；
+\item $0<\lambda_i^\star<C \Rightarrow \xi_i^\star=0,\ y_i(\bm w^{\star\top}x_i+\alpha^\star)=1$：\emph{边界}支持向量；
+\item $\lambda_i^\star=C \Rightarrow y_i(\bm w^{\star\top}x_i+\alpha^\star)=1-\xi_i^\star\le 1$：在间隔内或被误分的\emph{错误/软}支持向量。
+\end{enumerate}
+
+\subsection*{A.5 与合页损失（Hinge Loss）的等价}
+原始问题 \eqref{eq:primal_full} 可改写为正则化风险最小化：
+\begin{equation}\label{eq:hinge_form}
+\min_{\bm w,\alpha}\ \frac{1}{2}\|\bm w\|^2 + C\sum_{i=1}^n \ell_{\text{hinge}}\!\left(y_i,\ \bm w^\top x_i+\alpha\right),
+\quad
+\ell_{\text{hinge}}(y,t)=\max\{0,\ 1-y\,t\}.
+\end{equation}
+证明要点：对给定 $(\bm w,\alpha)$，对每个 $i$ 的最优 $\xi_i$ 来自
+\[
+\min_{\xi_i\ge0}\ \ C\xi_i\quad \text{s.t.}\ \ \xi_i \ge 1-y_i(\bm w^\top x_i+\alpha),
+\]
+其最优解为 $\xi_i^\star=\max\{0,\ 1-y_i(\bm w^\top x_i+\alpha)\}$，代回得到 \eqref{eq:hinge_form}。
+这说明 SVM 是“二范数正则化 + 合页损失”的最大间隔分类器。
+
+\subsection*{A.6 核化（Kernelization）}
+在对偶 \eqref{eq:dual} 与判别 \eqref{eq:decision} 中，数据仅以内积 $x_i^\top x_j$、$x_i^\top x$ 出现。定义\emph{核函数}
+\[
+K(x,z) = \inner{\Phi(x)}{\Phi(z)},
+\]
+其中 $\Phi(\cdot)$ 是（可能高维/无限维的）特征映射，且 $K$ 对称且正定。将所有内积替换为核函数：
+\begin{equation}\label{eq:dual_kernel}
+\begin{aligned}
+\max_{\bm\lambda}\quad & 
+\sum_{i=1}^n \lambda_i \ -\ \frac{1}{2}\sum_{i=1}^n\sum_{j=1}^n 
+\lambda_i \lambda_j\, y_i y_j\, K(x_i,x_j)\\
+\text{s.t.}\quad &
+\sum_{i=1}^n \lambda_i y_i = 0,\qquad 0\le \lambda_i \le C.
+\end{aligned}
+\end{equation}
+\begin{equation}\label{eq:decision_kernel}
+f(x) = \operatorname{sign}\!\left(\sum_{i=1}^n \lambda_i^\star y_i\, K(x_i,x) + \alpha^\star\right).
+\end{equation}
+常见核：线性核 $K(x,z)=x^\top z$、多项式核 $K(x,z)=(x^\top z+c)^p$、RBF 核 $K(x,z)=\exp\!\bigl(-\|x-z\|^2/(2\sigma^2)\bigr)$ 等。核化避免了显式构造 $\Phi$ 及其维度爆炸。
+
+\subsection*{A.7 硬间隔与极限情形}
+当数据严格可分且取 $C\to\infty$ 时，软间隔对偶 \eqref{eq:dual_kernel} 退化到硬间隔的对偶，最优解强制 $\xi_i^\star=0$，得到经典最大间隔分离超平面。
+
+\subsection*{A.8 计算与实现要点}
+1）对偶问题是带盒约束与一个等式约束的凹 QP，SMO 类分解方法高效稳定；2）偏置 $\alpha^\star$ 建议在所有 $0<\lambda_i^\star<C$ 的边界支持向量上取平均；3）特征缩放与核参数（如多项式次数、RBF 的 $\sigma$）必须与 $C$ 一并经验证优化。
+
+\bigskip
+\noindent\textbf{小结：}
+软间隔 SVM 的对偶仅依赖样本的成对相似度（内积/核），最优解由少量支持向量决定；核技巧在不显式升维的情形下实现了高维线性分割，从而在原空间产生非线性决策边界。
+
+
+\section*{附录B：常见核与特征维度增长}
+\begin{enumerate}
+  \item 多项式核 $K(x,z)=(x^\top z+c)^p$，对应显式特征维度 $\binom{d+p}{p}$；
+  \item RBF 核 $K(x,z)=\exp(-\tfrac{\norm{x-z}^2}{2\sigma^2})$，对应无限维特征；
+  \item 仅平方项时新增维度 $\mathcal{O}(d)$，包含交叉项时为 $\mathcal{O}(d^2)$。
+\end{enumerate}
+
+
+
+
+%%----------- 参考文献 -------------------%%
+%在reference.bib文件中填写参考文献，此处自动生成
+\newpage
+\reference
+
+
+\end{document}

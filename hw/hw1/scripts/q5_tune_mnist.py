@@ -1,8 +1,3 @@
-# scripts/q5_ultra_finetune_mnist_rff.py
-# 目标：围绕你已得最优点 (gamma≈0.83907, m=3000, C=0.4) 做更细微调，
-#      以期稳定突破 0.955，保持运行时间可控。
-# 管线：imgnorm → RBFSampler → StandardScaler(with_mean=False) → LinearSVC(squared_hinge, dual=False)
-
 import os
 os.environ["FOR_DISABLE_CONSOLE_CTRL_HANDLER"] = "1"
 os.environ["OMP_NUM_THREADS"] = "1"

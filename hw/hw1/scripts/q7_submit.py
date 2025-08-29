@@ -1,8 +1,3 @@
-# scripts/q7_submit.py
-# 第七问统一提交脚本（覆盖原文件）
-# 1) MNIST: imgnorm → RBFSampler → StandardScaler(with_mean=False) → LinearSVC(squared_hinge, dual=False)
-# 2) Spam : StandardScaler → LinearSVC(squared_hinge, dual=False)
-
 import os
 import sys
 import numpy as np

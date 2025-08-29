@@ -1,0 +1,20 @@
+\contentsline {section}{\numberline {1}问题背景与动机}{1}{section.1}%
+\contentsline {subsection}{\numberline {1.1}硬间隔 SVM 的局限}{1}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}软间隔思想}{1}{subsection.1.2}%
+\contentsline {section}{\numberline {2}软间隔 SVM：约束、几何与优化}{1}{section.2}%
+\contentsline {subsection}{\numberline {2.1}松弛变量与几何解释}{1}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}原始问题（QP）与参数 \(C\)}{1}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}偏置与同质化}{2}{subsection.2.3}%
+\contentsline {section}{\numberline {3}非线性边界：特征与升维}{2}{section.3}%
+\contentsline {subsection}{\numberline {3.1}总路线}{2}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}抛物提升映射：球面 \(\leftrightarrow \) 超平面}{2}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}二次曲面（Quadrics）与二次特征}{2}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}一般 $p$ 次多项式边界与升维的普适性}{3}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}核技巧（Kernel Trick）}{3}{subsection.3.5}%
+\contentsline {section}{\numberline {4}次数、间隔与泛化：复杂度权衡}{3}{section.4}%
+\contentsline {subsection}{\numberline {4.1}提高次数的双重效应}{3}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}训练与测试误差随复杂度的典型曲线}{3}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}与 \(C\) 的联动调参}{3}{subsection.4.3}%
+\contentsline {section}{\numberline {5}特征工程：从多项式到任务特定特征}{4}{section.5}%
+\contentsline {subsection}{\numberline {5.1}边缘检测与 HOG}{4}{subsection.5.1}%
+\contentsline {section}{\numberline {6}实践要点与建议}{4}{section.6}%

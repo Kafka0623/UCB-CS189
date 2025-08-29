@@ -1,4 +1,3 @@
-# scripts/q6_cv_spam.py
 import numpy as np
 from sklearn.svm import LinearSVC
 from sklearn.model_selection import StratifiedKFold
