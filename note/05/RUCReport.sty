@@ -1,0 +1,146 @@
+\ProvidesPackage{RUCReport}
+
+%% ---------------- 基础版式 ----------------
+\RequirePackage[left=3.17cm, right=3.17cm, top=2.54cm, bottom=2.54cm]{geometry}
+\RequirePackage{setspace}
+\setstretch{1.25} % 行距 1.25
+
+%% ---------------- 先传递超链接断字，再加载 hyperref ----------------
+\PassOptionsToPackage{hyphens}{url}
+\RequirePackage[unicode=true,colorlinks,urlcolor=blue,linkcolor=black,bookmarksnumbered=true]{hyperref}
+
+%% ---------------- 常用宏包 ----------------
+\RequirePackage{latexsym,amssymb,amsmath,amsbsy,amsopn,amstext,amsthm,amsxtra,color,bm,calc,ifpdf}
+\RequirePackage{graphicx}
+\RequirePackage{enumerate}
+\RequirePackage{fancyhdr}
+\RequirePackage{listings}
+\RequirePackage{multirow}
+\RequirePackage{makeidx}
+\RequirePackage{xcolor}
+\RequirePackage{pythonhighlight}
+\RequirePackage{tcolorbox}
+\RequirePackage{fontawesome}
+\RequirePackage{caption}
+\captionsetup[table]{labelsep=space}
+\captionsetup[figure]{labelsep=space}
+
+%% ---------------- 字体设置（Windows 系统字库） ----------------
+\RequirePackage{fontspec}
+% 用 HarfBuzz 渲染避免 xdvipdfmx 对某些字体的兼容问题
+\defaultfontfeatures{Renderer=HarfBuzz, Ligatures=TeX}
+
+% xeCJK 已由 ctex 类加载，这里直接设定中文字体
+% 中文主字体：宋体（SimSun，字库全，含“喆”）
+% 注意：SimSun 只有 Regular，没有粗体/斜体；开启 AutoFakeBold/Slant 以避免样式缺失
+\xeCJKsetup{AutoFakeBold=true, AutoFakeSlant=true}
+\setCJKmainfont{SimSun}
+% 中文无衬线：微软雅黑
+\setCJKsansfont{Microsoft YaHei}
+% 中文等宽：也用微软雅黑以保证字形一致
+\setCJKmonofont{Microsoft YaHei}
+
+% 英文字体：正文衬线 / 无衬线 / 等宽
+\setmainfont{Times New Roman}
+\setsansfont{Arial}
+\setmonofont{Consolas}
+
+% 姓名专用字体：优先微软雅黑（黑体风格），缺字回退宋体
+\setCJKfamilyfont{rucname}{Microsoft YaHei}[BoldFont={Microsoft YaHei Bold}]
+\setCJKfallbackfamilyfont{rucname}{SimSun}
+\newcommand{\NameFont}{\CJKfamily{rucname}}
+
+%% ---------------- 中文 autoref 名称 ----------------
+\def\equationautorefname{式}
+\def\footnoteautorefname{脚注}
+\def\itemautorefname{项}
+\def\figureautorefname{图}
+\def\tableautorefname{表}
+\def\partautorefname{篇}
+\def\appendixautorefname{附录}
+\def\chapterautorefname{章}
+\def\sectionautorefname{节}
+\def\subsectionautorefname{小小节}
+\def\subsubsectionautorefname{subsubsection}
+\def\paragraphautorefname{段落}
+\def\subparagraphautorefname{子段落}
+\def\FancyVerbLineautorefname{行}
+\def\theoremautorefname{定理}
+
+%% ---------------- 定理环境 ----------------
+\newtheorem{Theorem}{定理}[section]
+\newtheorem{Lemma}[Theorem]{引理}
+\newtheorem{Corollary}[Theorem]{推论}
+\newtheorem{Proposition}[Theorem]{命题}
+\newtheorem{Definition}[Theorem]{定义}
+\newtheorem{Example}[Theorem]{例}
+
+%% ---------------- 摘要标题样式 ----------------
+\renewcommand{\abstractname}{\textbf{\large {摘\quad 要}}}
+
+%% ---------------- 固定长度下划线 ----------------
+\makeatletter
+\newcommand\dlmu[2][4cm]{\hskip1pt\underline{\hb@xt@ #1{\hss#2\hss}}\hskip3pt}
+\makeatother
+
+%% ---------------- 参考文献 ----------------
+\newcommand{\reference}{
+  %\nocite{*}
+  \bibliographystyle{unsrt}
+  \begin{center}
+    \bibliography{reference}
+  \end{center}
+}
+
+%% ---------------- 文本框 ----------------
+\newcommand{\tbox}[1]{
+\begin{center}
+\begin{tcolorbox}[colback=gray!10,
+                  colframe=black,
+                  width=8cm,
+                  arc=1mm, auto outer arc,
+                  boxrule=0.5pt]
+{#1}
+\end{tcolorbox}
+\end{center}
+}
+
+%% ---------------- 页眉 ----------------
+\pagestyle{fancy}
+\fancyhead[L]{}
+\fancyhead[C]{}
+\fancyhead[R]{}
+
+%% ---------------- 封面 ----------------
+% 这里的标题/作者块可在主文档中直接使用
+% 姓名字段里示例使用 \NameFont，确保“喆”等字正常显示
+{
+  \title{
+    \vspace{2cm}
+    \heiti \Huge \textbf{{XXXX}} \par
+    \vspace{1cm}
+    \heiti \Large {\underline{XXXXX}}
+    \vspace{3cm}
+  }
+  \author{
+    \vspace{0.5cm}
+    \kaishu\Large 学院\ \dlmu[9cm]{} \\
+    \vspace{0.5cm}
+    \kaishu\Large 专业\ \dlmu[9cm]{} \\
+    \vspace{0.5cm}
+    \kaishu\Large 学号\ \dlmu[9cm]{} \qquad \\
+    \vspace{0.5cm}
+    \kaishu\Large 姓名\ \dlmu[9cm]{{\NameFont }} % ← 关键：使用 \NameFont
+  }
+  \date{\today}
+}
+
+% 封面命令：需要 figures/ruc.png 存在
+\newcommand{\cover}{
+  \begin{figure}
+    \centering
+    \vspace{2cm}
+    \includegraphics[width=0.6\textwidth]{figures/ruc.png}
+  \end{figure}
+  \maketitle
+}
